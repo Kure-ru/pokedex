@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <h2>Pokedex</h2>
+    </header>
+    <main>
+      <!-- place to search for the pokemon name -->
+      <div class="search__bar">
+        <label for="name">search a pokemon by name</label>
+        <input id="name" name="name" />
+        <button class="search__button">GO!</button>
+      </div>
+      <!-- single pokemon display  -->
+      <section>
+        <h1>Pokemon name</h1>
+        <span>id ###</span>
+        <img src="#" alt="pokemon picture" />
+        <p>type</p>
+        <p>moves</p>
+        <p>stats</p>
+        <div>
+            <span>Evolutions</span>
+            <ul>
+                <li>
+                    <img/>
+                    <span>evolution#1</span>
+                </li>
+                <li>
+                    <img/>
+                    <span>evolution#2</span>
+                </li>
+            </ul>
+        </div>
+      </section>
+    </main>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
