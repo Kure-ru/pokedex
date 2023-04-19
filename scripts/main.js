@@ -1,6 +1,8 @@
 //POKEMON NAME SEARCH
 
 //fetch pokemon API from https://pokeapi.co/api/v2/pokemon/
+const errorMessage = document.getElementById('error-message')
+
 const searchButton = document.querySelector(".search__button");
 searchButton.addEventListener("click", fetchPokemonData);
 
@@ -30,16 +32,14 @@ async function fetchPokemonData() {
 }
 
 //SELECTION BY POKEMON TYPES
-
 const pokemonTypeList = document.querySelectorAll("#pokemon-type-list li")
-const content = document.getElementById("pokemon-type-render")
+const content = document.getElementById("pokemon-filtered-by-type")
 
 //adds event listener to every list in UL element
 for(let i = 0; i < pokemonTypeList.length; i++)
 {
   pokemonTypeList[i].addEventListener('click', listPokemonsByType)
 }
-
 
 //if the list of pokemons - filtered by type - exist, remove them
 function clearDOM(){
@@ -48,7 +48,7 @@ function clearDOM(){
   }
 }
 
-//show list of pokemons after you select the type
+//show list of pokemons after you click on a specific
 async function listPokemonsByType(){
   clearDOM()
 
@@ -57,89 +57,78 @@ async function listPokemonsByType(){
   console.log(this.value)
 
   fetch(url)
-        .then(res => res.json()) // parse response as JSON
-        .then(data => {
-          let store = [...data.pokemon]
-          console.log(data)
-          
-          //create a div template
-          let divTemplate = `
+    .then(res => res.json()) // parse response as JSON
+    .then(data => {
+      console.log(data.pokemon) //this is array of objects
+
+      //create a HTML div template and lists
+      generateMarkupForPokemonFilteredByType(data);
+    })
+    .catch(err => {
+      console.log(`error ${err}`)
+    });
+}
+
+//function to generate HTML
+function generateMarkupForPokemonFilteredByType(data){
+  let divTemplate = `
             <div>
                 <h3>${data.name.toUpperCase()} POKEMONS</h3>
                 <ul id="pokemon-list">
                 </ul>
             </div>
         ` ;
-          const markup = document.createRange().createContextualFragment(divTemplate).children[0];
-          content.appendChild(markup);
+  const markup = document.createRange().createContextualFragment(divTemplate).children[0];
+  content.appendChild(markup);
 
-          
-          //select the div that was created on the lines above
-          const friendListUl = document.getElementById('pokemon-list');
+  //select the div that was created on divTemplate
+  const pokemonListUl = document.getElementById('pokemon-list');
 
-
-          //create an array from the json data
-          const friendElements = dataFormatter(store)
-          
-          friendElements.forEach((item, index) => {
-            //create an event listener for every list item, ,
-            item.addEventListener('click', getSelectedPokemonDetails);
-            
-            //then append to DOM
-            friendListUl.appendChild(item)
-          });
-        })
-        .catch(err => {
-            console.log(`error ${err}`)
-        });
-}
-
-function dataFormatter(data) {
-
-  const markup = data.map(item => {
-      const listTemplate = `
-      <li><a href="#" data-id="${item.pokemon.url}">${item.pokemon.name} </a></li>
-  `;
-      return document.createRange().createContextualFragment(listTemplate).children[0];
+  //create an array from the json data
+  const pokemonLi = data.pokemon.map(item => {
+    const listTemplate = `<li><a href="#" data-id="${item.pokemon.url}">${item.pokemon.name} </a></li>`;
+    return document.createRange().createContextualFragment(listTemplate).children[0];
   });
-  return markup;
+
+  pokemonLi.forEach((item, index) => {
+    //create an event listener for every list item, ,
+    item.addEventListener('click', getSelectedPokemonDetails);
+
+    //then append to DOM
+    pokemonListUl.appendChild(item)
+  });
 }
 
 //remove the list and shows the detail of the selected pokemon
-async function getSelectedPokemonDetails(e)
-    {
-        //console.log(e.currentTarget);
+async function getSelectedPokemonDetails(e){
+  //console.log(e.currentTarget);
+  console.log(e.currentTarget.firstChild.dataset.id)
 
+  //this is duplicate with fetchPokemonData() with some changes
+  
+  const requestPkm = await fetch(e.currentTarget.firstChild.dataset.id);
+  const data = await requestPkm.json();
 
-        //get data from json
-        fetch(`${e.currentTarget.firstChild.dataset.id}`)
-            .then(response => response.json()) //returns a promise
-            .then(data => {
-                let store = {...data};
-                console.log(data)
-                clearDOM();
+  const requestSpecie = await fetch(
+    `https://pokeapi.co/api/v2/pokemon-species/${data.species.name}`
+  );
+  const speciesData = await requestSpecie.json();
 
-                const template = `
-                <div>
-                    <div>
-                        <img src="${store.sprites.front_default}" />
-                        <h2>${store.name} </h2>
-                        <ul>
-                            <li>${store.stats[0]}</li>
-                        </ul>
-                    </div>
-                    <p>
-                        Weight: ${store.weight}
-                    </p>
-                </div>
-                
-                `;
+  const evolutionChainResponse = await fetch(speciesData.evolution_chain.url);
+  const evolutionData = await evolutionChainResponse.json();
 
-                const docFragment = document.createRange().createContextualFragment(template).children[0];
-                content.appendChild(docFragment);
+  let evolutions = [evolutionData.chain.species.name];
+  let currentEvolution = evolutionData.chain;
 
-            });
-    }
+  while (currentEvolution.evolves_to.length > 0) {
+    currentEvolution = currentEvolution.evolves_to[0];
+    evolutions.push(currentEvolution.species.name);
+  }
+
+  displayPokemonData(data, evolutions);
+
+  //the code is a duplicate with fetchPokemonData() with some change... need to edit?
+}
 
     //single pokemon display
 function displayPokemonData(data, evolutions) {
