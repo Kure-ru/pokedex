@@ -1,0 +1,31 @@
+/* BASE STYLE */
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+main{
+    display: flex;
+}
+
+
+.left-side{
+
+}
+
+.right-side{
+    
+}
+
+/* POKEMON CONTAINER */
+
+#pokemon__container{
+    display: grid;
+}
+
+/* #pokemon-list li {
+    background-color: red;
+} */

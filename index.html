@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokedex</title>
+    <link rel="stylesheet" href="styles/normalize.css" />
     <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body>
@@ -12,23 +13,8 @@
       <h2>Pokedex</h2>
     </header>
     <main>
-      <!-- place to search for the pokemon name -->
-      <div class="search__bar">
-        <label for="name">search a pokemon by name</label>
-        <input id="name" name="name" />
-        <button class="search__button">GO!</button>
-      </div>
-      <!-- single pokemon display  -->
-      <section id="pokemon__container">
-
-      </section>
-
-      <section id="error-message">
-        
-      </section>
-
       <!--left side nav - list of types-->
-      <section>
+      <section class="left-side">
         <nav>
           <ul id="pokemon-type-list">
             <li value="1"><a href="#">Normal</a></li>
@@ -54,13 +40,24 @@
           </ul>
         </nav>
       </section>
-      
 
-      <!--list of pokemons filtered by type, this is where the lists will show up after you select a type-->
-      <section id="pokemon-filtered-by-type">
-        
+      <!-- display on the right side -->
+      <section class="right-side">
+        <!-- place to search for the pokemon name -->
+        <div class="search__bar">
+          <label for="name">search a pokemon by name</label>
+          <input id="name" name="name" />
+          <button class="search__button">GO!</button>
+        </div>
+
+        <!-- single pokemon display  -->
+        <section id="pokemon__container"></section>
+
+        <section id="error-message"></section>
+
+        <!--list of pokemons filtered by type, this is where the lists will show up after you select a type-->
+        <section id="pokemon-filtered-by-type"></section>
       </section>
-      
     </main>
     <script src="scripts/main.js"></script>
   </body>
