@@ -13,9 +13,19 @@ const errorMessage = document.getElementById("error-message");
 const searchButton = document.querySelector(".search__button");
 searchButton.addEventListener("click", fetchPokemonData);
 
-async function fetchPokemonData() {
+async function fetchPokemonData(e) {
   //TODO: error message if wrong input
-  const search = document.querySelector("#name").value;
+
+  let search = document.querySelector("#name").value;
+  
+  //if the event calling this is not the searchbar button
+  if(e.currentTarget.tagName != "BUTTON") 
+  {
+    //console.log(e.currentTarget.id)
+    search = e.currentTarget.firstChild.dataset.id
+  }
+
+  //if search bar is null
   try {
     //fetch basic data based on pokemon name
     const requestPkm = await fetch(
@@ -44,40 +54,6 @@ async function fetchPokemonData() {
     errorMessage.textContent = `${err}`;
   }
 }
-
-//////////////////////////////////DUPLICATE
-
-//remove the list and shows the detail of the selected pokemon
-async function getSelectedPokemonDetails(e) {
-  //console.log(e.currentTarget);
-  console.log(e.currentTarget.firstChild.dataset.id);
-
-  //this is duplicate with fetchPokemonData() with some changes!!!!!
-
-  const requestPkm = await fetch(e.currentTarget.firstChild.dataset.id);
-  const data = await requestPkm.json();
-
-  const requestSpecie = await fetch(
-    `https://pokeapi.co/api/v2/pokemon-species/${data.species.name}`
-  );
-  const speciesData = await requestSpecie.json();
-
-  const evolutionChainResponse = await fetch(speciesData.evolution_chain.url);
-  const evolutionData = await evolutionChainResponse.json();
-
-  let evolutions = [evolutionData.chain.species.name];
-  let currentEvolution = evolutionData.chain;
-
-  while (currentEvolution.evolves_to.length > 0) {
-    currentEvolution = currentEvolution.evolves_to[0];
-    evolutions.push(currentEvolution.species.name);
-  }
-
-  displayPokemonData(data, evolutions);
-
-  //the code is a duplicate with fetchPokemonData() with some change... need to edit?
-}
-///////////////////////////////DUPLICATE END
 
 //if the list of pokemons - filtered by type - exist, remove them
 function clearDOM(divToClear) {
@@ -133,14 +109,14 @@ function generateMarkupForPokemonFilteredByType(data) {
 
   //create an array from the json data
   const pokemonLi = data.pokemon.map((item) => {
-    const listTemplate = `<li><a href="#" data-id="${item.pokemon.url}">${item.pokemon.name} </a></li>`;
+    const listTemplate = `<li><a href="#" data-id="${item.pokemon.name}">${item.pokemon.name} </a></li>`;
     return document.createRange().createContextualFragment(listTemplate)
       .children[0];
   });
 
   pokemonLi.forEach((item, index) => {
     //create an event listener for every list item, ,
-    item.addEventListener("click", getSelectedPokemonDetails);
+    item.addEventListener("click", fetchPokemonData);
 
     //then append to DOM
     pokemonListUl.appendChild(item);
@@ -148,10 +124,11 @@ function generateMarkupForPokemonFilteredByType(data) {
 }
 //single pokemon display
 function displayPokemonData(data, evolutions) {
+  clearDOM(pokemonContainer);
   let pokemonTemplate = `
   <div>
     <div class="left-container">
-      <img src="">
+      <img src="${data.sprites.front_default}">
       <h2>${data.name}</h2>
       <span>#${data.id}</span>
       <span>${data.types[0].type.name}</span>
@@ -188,7 +165,7 @@ function displayPokemonData(data, evolutions) {
   //display pkm abilities
   data.abilities.map((ability) => {
     const abilitiesTemplate = `<li>${ability.ability.name}</li>`;
-    console.log(abilitiesTemplate);
+    //console.log(abilitiesTemplate);
     document
       .querySelector("#abilities-list")
       .insertAdjacentHTML("beforeend", abilitiesTemplate);
