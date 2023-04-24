@@ -73,6 +73,7 @@ for (let i = 0; i < pokemonTypeList.length; i++) {
 async function listPokemonsByType() {
   clearDOM(pokemonContainer);
   clearDOM(pokemonFilteredByType);
+  clearDOM(errorMessage);
 
   //this.value comes from the value of the LI that you clicked on
   let url = `https://pokeapi.co/api/v2/type/${this.value}`;
@@ -93,6 +94,7 @@ async function listPokemonsByType() {
 
 //function to generate HTML
 function generateMarkupForPokemonFilteredByType(data) {
+  
   let divTemplate = `
             <div>
                 <h3>${data.name.toUpperCase()} POKEMONS</h3>
@@ -107,24 +109,39 @@ function generateMarkupForPokemonFilteredByType(data) {
   //select the div that was created on divTemplate
   const pokemonListUl = document.getElementById("pokemon-list");
 
+  const LIST_TO_EXCLUDE = [
+    
+  ]
+
   //create an array from the json data
   const pokemonLi = data.pokemon.map((item) => {
-    const listTemplate = `<li><a href="#" data-id="${item.pokemon.name}">${item.pokemon.name} </a></li>`;
-    return document.createRange().createContextualFragment(listTemplate)
-      .children[0];
+    if(item.pokemon.name.includes('-')){
+      console.log(item.pokemon.name)
+      return null;
+    }
+    else {
+      const listTemplate = `<li><a href="#" data-id="${item.pokemon.name}">${item.pokemon.name} </a></li>`;
+      return document.createRange().createContextualFragment(listTemplate)
+        .children[0];
+    }
+    
   });
 
   pokemonLi.forEach((item, index) => {
     //create an event listener for every list item, ,
-    item.addEventListener("click", fetchPokemonData);
+    if(item != null)
+    {
+      item.addEventListener("click", fetchPokemonData);
 
-    //then append to DOM
-    pokemonListUl.appendChild(item);
+      //then append to DOM
+      pokemonListUl.appendChild(item);
+    }
   });
 }
 //single pokemon display
 function displayPokemonData(data, evolutions) {
   clearDOM(pokemonContainer);
+  clearDOM(errorMessage);
   let pokemonTemplate = `
   <div>
     <div class="left-container">
