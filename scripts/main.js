@@ -141,6 +141,7 @@ function generateMarkupForPokemonFilteredByType(data) {
 //single pokemon display
 function displayPokemonData(data, evolutions) {
   clearDOM(pokemonContainer);
+  clearDOM(pokemonFilteredByType);
   clearDOM(errorMessage);
   let pokemonTemplate = `
   <div>
