@@ -1,16 +1,18 @@
 # Pokedex Project
 
-**Link to project:** http://recruiters-love-seeing-live-demos.com/
+**Link to project:** https://kure-ru.github.io/pokedex/
 
-![alt tag](http://placecorgi.com/1200/650)
+![pokedex](screenshot.png)
 
 ## How It's Made:
 
 **Tech used:** HTML, CSS, JavaScript
 
 ## Optimizations
-
+- [ ] make design responsive for mobiles
+- [ ] improve display of pokemon types
 
 ## Lessons Learned:
+
 
 

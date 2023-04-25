@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+
 /* BASE STYLE */
 li{
     list-style: none;
@@ -7,24 +10,96 @@ a{
     text-decoration: none;
 }
 
+body{
+    padding: 2rem;
+}
 main{
     display: flex;
-}
-
-
-.left-side{
-
-}
-
-.right-side{
+    font-family: 'Montserrat', sans-serif;
+    margin: 0 auto;
     
 }
 
+/* .right-side{
+    padding-left: 6em;
+} */
+
+h2{
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+}
+
+h4{
+    font-size: 1.4rem;
+}
+
+
+/* POKEMON TYPE LIST */
+
+#pokemon-type-list li{
+    padding: 0.3rem 2rem 0.3rem 0;
+    justify-content: center;
+    align-items: center;
+}
+
+#pokemon-list{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 400px;
+}
+
+#pokemon-list li{
+    padding: 0.3rem 2rem 0.3rem 0.3rem;
+    
+}
+
+
+a{
+    color: black;
+}
 /* POKEMON CONTAINER */
 
 #pokemon__container{
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+.upper-container{
+    display: flex;
+    border-bottom: 1px solid rgb(213, 212, 212);
+}
+
+.upper-left-container{
+    padding: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upper-right-container{
+    padding: 2rem 2rem;
+}
+
+.lower-container{
+    padding: 2rem 2rem;
+}
+.lower-container h4{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#evolution-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+
 
 /* #pokemon-list li {
     background-color: red;

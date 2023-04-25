@@ -145,26 +145,27 @@ function displayPokemonData(data, evolutions) {
   clearDOM(errorMessage);
   let pokemonTemplate = `
   <div>
-    <div class="left-container">
-      <img src="${data.sprites.front_default}">
-      <h2>${data.name}</h2>
-      <span>#${data.id}</span>
-      <span>${data.types[0].type.name}</span>
-    </div>
+    <div class="upper-container">
+      <div class="upper-left-container">
+        <img src="${data.sprites.front_default}">
+        <h2>${data.name}</h2>
+        <span>${data.types[0].type.name}</span>
+      </div>
 
-    <div class="right-container">
-    <h4>stats</h4>
-      <ul id="stats-list"> 
-      </ul>
-      <h4>abilities</h4>
-      <ul id="abilities-list"> 
-      </ul>
-    </div>
+      <div class="upper-right-container">
+      <h4>stats</h4>
+        <ul id="stats-list"> 
+        </ul>
+        <h4>abilities</h4>
+        <ul id="abilities-list"> 
+        </ul>
+      </div>
+    </div> 
 
-    <div>
-      <h4>EVOLUTIONS</h4>
+    <div class="lower-container">
+      <h4>evolutions</h4>
       <div id="evolution-container"></div>
-    </div>
+    </div> 
   </div>
   `;
   const markup = document
@@ -196,17 +197,20 @@ function displayPokemonData(data, evolutions) {
       `https://pokeapi.co/api/v2/pokemon/${pokemon}`
     );
     const pokemonData = await pokemonResponse.json();
-
+    
+    const evolutionDiv = document.createElement('div');
+  
     const pokemonName = document.createElement("p");
     pokemonName.textContent = pokemonData.name;
 
     const pokemonImage = document.createElement("img");
     pokemonImage.src = pokemonData.sprites.front_default;
-
-    evolutionContainer.appendChild(pokemonName);
-    evolutionContainer.appendChild(pokemonImage);
+    
+    evolutionContainer.appendChild(evolutionDiv);
+    evolutionDiv.appendChild(pokemonName);
+    evolutionDiv.appendChild(pokemonImage);
   });
-  pokemonContainer.appendChild(evolutionContainer);
+  
 }
 
 //get and store data from input form
